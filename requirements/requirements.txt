@@ -1,0 +1,11 @@
+pyyaml
+h5py
+numpy==1.19.2
+matplotlib
+xlrd
+pandas
+testresources
+tensorflow
+tensorflow_hub
+tensorflow_datasets
+transformers==2.11.0
