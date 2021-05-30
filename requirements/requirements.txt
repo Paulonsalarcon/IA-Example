@@ -1,5 +1,5 @@
 pyyaml
-h5py
+h5py==3.1.0
 numpy==1.19.2
 matplotlib
 xlrd
