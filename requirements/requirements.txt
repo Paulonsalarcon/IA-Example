@@ -1,11 +1,15 @@
 pyyaml
-h5py==3.1.0
+gast==0.3.3
+grpcio==1.32.0
+h5py==2.10.0
 numpy==1.19.2
 matplotlib
 xlrd
 pandas
 testresources
 tensorflow
+tensorflow-estimator<2.5.0,>=2.4.0
 tensorflow_hub
 tensorflow_datasets
+tensorflow-rocm
 transformers==2.11.0

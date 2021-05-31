@@ -236,7 +236,6 @@ class SemanticComparer:
             f.close()
     
     def TrainPhase1(self, trainingData):
-        return
         train_data = BertSemanticDataGenerator(
             trainingData.train_df[["sentence1", "sentence2"]].values.astype("str"),
             trainingData.y_train,
@@ -262,7 +261,6 @@ class SemanticComparer:
         self.SetCheckPoint(phase1)
 
     def TrainPhase2(self, trainingData):
-        return
         train_data = BertSemanticDataGenerator(
             trainingData.train_df[["sentence1", "sentence2"]].values.astype("str"),
             trainingData.y_train,
