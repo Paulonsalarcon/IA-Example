@@ -333,7 +333,7 @@ class SemanticComparer:
     
     def Reload(self):
         if os.path.exists(self.modelpath):
-            self.model = tf.keras.models.load_model('saved_model/my_model')
+            self.model = tf.keras.models.load_model(str(self.modelpath))
 
             # Check its architecture
             self.model.summary()
