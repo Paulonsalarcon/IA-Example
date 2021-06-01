@@ -5,7 +5,7 @@ import transformers
 import os
 import pathlib
 
-max_length = 200  # Maximum length of input sentence to the model.
+max_length = 128      # Maximum length of input sentence to the model.
 batch_size = 32
 epochs = 2
 
@@ -156,6 +156,7 @@ class SemanticComparer:
         self.CreateModel()
 
     def CreateModel(self):
+        print("Creating Model")
         # Create the model under a distribution strategy scope.
         strategy = tf.distribute.MirroredStrategy()
 
@@ -203,10 +204,10 @@ class SemanticComparer:
 
         print(f"Strategy: {strategy}")
         self.model.summary
-
-        self.Save()
+        print("Model Created")
 
     def Train(self, trainingData):
+        print("Start Model Training")
         phase = self.GetPhaseFromCheckpoint()
         if not phase:
             self.TrainPhase1(trainingData)
@@ -214,9 +215,11 @@ class SemanticComparer:
         else:
             self.Reload()
             if phase == phase1:
+                print("Training Phase 1 already performed")
                 self.TrainPhase2(trainingData)
             elif phase == phase2:
                 print("Network Already Trained")
+        print("Training Completed")
 
     def GetPhaseFromCheckpoint(self):
         if not os.path.exists(self.checkpointfile):
@@ -236,6 +239,7 @@ class SemanticComparer:
             f.close()
     
     def TrainPhase1(self, trainingData):
+        print("Starting Training Phase 1")
         train_data = BertSemanticDataGenerator(
             trainingData.train_df[["sentence1", "sentence2"]].values.astype("str"),
             trainingData.y_train,
@@ -259,8 +263,10 @@ class SemanticComparer:
 
         self.Save()
         self.SetCheckPoint(phase1)
+        print("Training Phase 1 Completed")
 
     def TrainPhase2(self, trainingData):
+        print("Starting Training Phase 2")
         train_data = BertSemanticDataGenerator(
             trainingData.train_df[["sentence1", "sentence2"]].values.astype("str"),
             trainingData.y_train,
@@ -304,6 +310,7 @@ class SemanticComparer:
 
         self.Save()
         self.SetCheckPoint(phase2)
+        print("Training Phase 2 Completed")
 
 
     def check_similarity(self,sentence1, sentence2):
@@ -332,18 +339,22 @@ class SemanticComparer:
         print(self.check_similarity(sentence1, sentence2))
     
     def Reload(self):
+        print("Traying to Reload Model")
         if os.path.exists(self.modelpath):
             self.model = tf.keras.models.load_model(str(self.modelpath))
 
             # Check its architecture
             self.model.summary()
+            print("Model Successfully Reloaded")
         else:
             print("No model found")
 
     def Save(self):
+        print("Saving Model")
         if not os.path.exists(self.modelpath):
             os.makedirs(self.modelpath,exist_ok=True)
         self.model.save(str(self.modelpath))
+        print("Model Successfully Saved")
         
             
 
