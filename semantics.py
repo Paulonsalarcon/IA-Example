@@ -339,7 +339,7 @@ class SemanticComparer:
         print(self.check_similarity(sentence1, sentence2))
     
     def Reload(self):
-        print("Traying to Reload Model")
+        print("Trying to Reload Model")
         if os.path.exists(self.modelpath):
             self.model = tf.keras.models.load_model(str(self.modelpath))
 
@@ -363,10 +363,6 @@ def main():
     trainingData = TrainingData()
 
     semanticComparer = SemanticComparer()
-    try:
-        semanticComparer.Reload()
-    except:
-        print("It was not possible to reload data from previous training")
     
     semanticComparer.Train(trainingData)
 
