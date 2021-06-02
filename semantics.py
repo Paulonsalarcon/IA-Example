@@ -178,7 +178,7 @@ class SemanticComparer:
             # Freeze the BERT model to reuse the pretrained features without modifying them.
             self.bert_model.trainable = False
 
-            sequence_output, pooled_output = self.bert_model(
+            sequence_output, pooled_output = self.bert_model.bert(
                 input_ids, attention_mask=attention_masks, token_type_ids=token_type_ids
             )
             # Add trainable layers on top of frozen layers to adapt the pretrained features on the new data.
