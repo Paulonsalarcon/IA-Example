@@ -152,6 +152,7 @@ class SemanticComparer:
         self.backuppath = pathlib.Path(__file__).parent.joinpath("semantic_comparer_backup")
         self.modelpath = self.backuppath.joinpath("semantic_comparer_model").absolute()
         self.checkpointfile = self.backuppath.joinpath("checkpoint.txt").absolute()
+        self.checkpoint_path = self.backuppath.joinpath("semantics.ckpt").absolute()
         
         self.CreateModel()
 
@@ -205,6 +206,11 @@ class SemanticComparer:
         print(f"Strategy: {strategy}")
         self.model.summary
         print("Model Created")
+    
+    def GetCallback(self):
+        return tf.keras.callbacks.ModelCheckpoint(filepath=self.checkpoint_path,
+                                                 save_weights_only=True,
+                                                 verbose=1)
 
     def Train(self, trainingData):
         print("Start Model Training")
@@ -259,6 +265,7 @@ class SemanticComparer:
             epochs=epochs,
             use_multiprocessing=True,
             workers=-1,
+            callbacks=[self.GetCallback()]
         )
 
         self.Save()
@@ -296,6 +303,7 @@ class SemanticComparer:
             epochs=epochs,
             use_multiprocessing=True,
             workers=-1,
+            callbacks=[self.GetCallback()]
         )
 
         self.Save()
@@ -343,9 +351,12 @@ class SemanticComparer:
         if os.path.exists(self.modelpath):
             self.model = tf.keras.models.load_model(str(self.modelpath))
 
+            self.model.load_weights(self.checkpoint_path)
+
             # Check its architecture
             self.model.summary()
             print("Model Successfully Reloaded")
+            self.TestNetwork()
         else:
             print("No model found")
 
@@ -355,6 +366,7 @@ class SemanticComparer:
             os.makedirs(self.modelpath,exist_ok=True)
         self.model.save(str(self.modelpath))
         print("Model Successfully Saved")
+        self.TestNetwork()
         
             
 
